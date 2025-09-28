@@ -1,6 +1,169 @@
+
+@media (min-width: 1024px) {
+  .bottom-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: start;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .upgrades {
+    order: 1;
+  }
+  .about {
+    order: 2;
+  }
+}
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+/******* All Text Elements ***************/
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  /* border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px;
+  position: relative;
+  border: 2px solid darkturquoise; */
+  /* background-image: url('../images/site/checkerboard.jpg'); */
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/******* Header ***************/
+.site-name a{
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  text-decoration: none;
+}
+.tools a{
+  color: black;
+  background-color: white;
+  text-decoration: none;
+  right: 0;
+  position: absolute;
+  transform: translateY(-140%);
+  margin-right: 20px;
+}
+
+/******* Navigation ***************/
+nav{
+  color: white;
+  background-color: black;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+nav ul {
+  display: flex;
+  justify-content: space-evenly;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+nav a{
+  color: white;
+  background-color: black;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/******* Body ***************/
+.vehicle-image{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 220px;
+}
+.intro{
+  color: black;
+  background-color: white;
+  opacity: 0.9;
+  transform: translateY(-175px);
+  width: fit-content;
+  height: 150px;
+  margin-left: 20px;
+}
+
+.intro h3, .intro p{
+  color: blue;
+  background-color: white;
+  opacity: 1.0;
+  padding-top: 2px;
+  padding-bottom: 10px;
+}
+.intro a{
+  color: white;
+  background-color: blue;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px;
+}
+.about, .upgrades{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+.about{
+  color: black;
+  background-color: white;
+  padding-bottom: 50px;
+}
+.about li{
+  margin-top: 10px;
+}
+.about h2{
+  margin-left:-100px;
+}
+.upgrade-list{
+  display: flex;
+  flex-wrap: wrap;
+  width: 400px;
+  height: 300px;
+  justify-content: center;
+  padding: 1px;
+}
+.upgrades h2{
+  margin-left:-160px;
+}
+.image-up{
+  color: #000;
+  background-color: blue;
+  border: 1px solid black;
+  display: block;
+  width: 180px;
+  height: 100px;
+  padding-bottom: 0px;
+  margin-right: 10px;
+}
+.flux-cap img, .flame img, .bumper-sticker img, .hub-cap img{
+  margin-top: 10%;
+}
+.flux-cap a, .flame a, .bumper-sticker a, .hub-cap a{
+  text-align: center;
+}
+.flux-cap p, .flame p, .bumper-sticker p, .hub-cap p{
+  margin-top: 0px;
+  margin-right: 10px;
+}
+
+/******** Footer ***************/
+footer{
+  margin-top: 20px;
 }
