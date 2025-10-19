@@ -12,6 +12,8 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
+const cookieParser = require("cookie-parser")
+const utilities = require("./utilities/")
 
 /* ***********************
  * View Engine and Templates
@@ -28,8 +30,21 @@ app.use(require("./routes/static"))
 // Index Route
 app.get("/", baseController.buildHome)
 
+// Error handling wrapper for async route functions
+app.get("/", utilities.handleErrors(baseController.buildHome))
+app.get("/footer", utilities.handleErrors(baseController.buildFooter))
+
 // Inventory routes
 app.use("/inv", inventoryRoute)
+
+// File Not Found Route - must be last route in list
+app.use(async (req, res, next) => {
+  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+})
+
+app.use(async (req, res, next) => {
+  next({status: 500, message: 'Sorry, an error occurred.'})
+})
 
 /* ***********************
 * Express Error Handler
@@ -45,10 +60,12 @@ app.use(async (err, req, res, next) => {
   })
 })
 
-// File Not Found Route - must be last route in list
-app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
-})
+utilities.handleErrors(baseController.buildHome)
+
+utilities.handleErrors(baseController.buildFooter)
+
+app.use(cookieParser())
+
 
 /* ***********************
  * Local Server Information

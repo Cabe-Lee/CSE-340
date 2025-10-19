@@ -61,6 +61,11 @@ SELECT inv_image, inv_thumbnail FROM inventory;
 
 
 
+DELETE FROM classification
+WHERE classification_id IN (6, 7, 8, 9, 10);
+
+
+
 -- Restoration code for database
 
 -- 4. Restoration

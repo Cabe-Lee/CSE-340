@@ -1,5 +1,8 @@
 const invModel = require("../models/inventory-model")
 const Util = {}
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+
 
 /* ******************************************
  * Constructs the navigation HTML unordered list
@@ -24,8 +27,6 @@ Util.getNav = async function (req, res, next) {
   return list
 }
 
-module.exports = Util
-
 /* **************************************
 * Build the classification view HTML
 * ************************************ */
@@ -35,7 +36,7 @@ Util.buildClassificationGrid = async function(data){
     grid = '<ul id="inv-display">'
     data.forEach(vehicle => { 
       grid += '<li>'
-      grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
+      grid +=  '<a href="/inv/detail/'+ vehicle.inv_id 
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
       + 'details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
@@ -58,3 +59,33 @@ Util.buildClassificationGrid = async function(data){
   }
   return grid
 }
+
+
+Util.buildVehicleDetail = async function(data){
+  let grid;
+  if(data.length > 0){
+    const vehicle = data[0];
+    grid = '<div class="main-grid"> <div class="img-container"><img class="thumb-img" src="' + vehicle.inv_image + '" alt="Image of ' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' on CSE Motors"/></div>'
+    grid += '<div class="detail-grid">'
+    grid += '<h1 class="detail-header">' + vehicle.inv_make + ' ' + vehicle.inv_model + ' Details</h1>'
+    grid += '<div class="container-color"><p><b>Price:</b> $' + new Intl.NumberFormat('en-US').format(vehicle.inv_price) + '</p></div>'
+    grid += '<div class="container-normal"><p><b>Description:</b> ' + vehicle.inv_description + '</p></div>'
+    grid += '<div class="container-color"><p><b>Color:</b> ' + vehicle.inv_color + '</p></div>'
+    grid += '<div class="container-normal"><p><b>Mileage:</b> ' + new Intl.NumberFormat('en-US').format(vehicle.inv_miles) + ' miles</p></div>'
+    grid += '</div></div>'
+  } else {
+    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return grid
+}
+
+/* ****************************************
+ * Middleware For Handling Errors
+ * Wrap other function in this for 
+ * General Error Handling
+ **************************************** */
+Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+
+module.exports = Util
+
