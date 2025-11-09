@@ -1,45 +1,77 @@
 
-// const jwt = require("jsonwebtoken")
-// require("dotenv").config()
+const utilities = require('../utilities')
+const accountModel = require('../models/account-model')
+const bcrypt = require("bcryptjs")
 
-// /* ****************************************
-//  *  Process login request
-//  * ************************************ */
-// async function accountLogin(req, res) {
-//   let nav = await utilities.getNav()
-//   const { account_email, account_password } = req.body
-//   const accountData = await accountModel.getAccountByEmail(account_email)
-//   if (!accountData) {
-//     req.flash("notice", "Please check your credentials and try again.")
-//     res.status(400).render("account/login", {
-//       title: "Login",
-//       nav,
-//       errors: null,
-//       account_email,
-//     })
-//     return
-//   }
-//   try {
-//     if (await bcrypt.compare(account_password, accountData.account_password)) {
-//       delete accountData.account_password
-//       const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
-//       if(process.env.NODE_ENV === 'development') {
-//         res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-//       } else {
-//         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
-//       }
-//       return res.redirect("/account/")
-//     }
-//     else {
-//       req.flash("message notice", "Please check your credentials and try again.")
-//       res.status(400).render("account/login", {
-//         title: "Login",
-//         nav,
-//         errors: null,
-//         account_email,
-//       })
-//     }
-//   } catch (error) {
-//     throw new Error('Access Forbidden')
-//   }
-// }
+const accountController = {}
+
+/* ****************************************
+*  Deliver login view
+* *************************************** */
+accountController.buildLogin = async function (req, res, next) {
+	let nav = await utilities.getNav()
+	res.render('account/login', {
+		title: 'Login',
+		nav,
+	})
+}
+
+/* ****************************************
+*  Deliver registration view
+* *************************************** */
+async function buildRegister(req, res, next) {
+  let nav = await utilities.getNav()
+  res.render('account/registration', {
+    title: 'Register',
+    nav,
+    errors: null,
+  })
+}
+
+
+
+/* ****************************************
+*  Process Registration
+* *************************************** */
+async function registerAccount(req, res) {
+  let nav = await utilities.getNav()
+  // use the form field names from the registration view
+  const { account_firstname, account_lastname, account_email, account_password } = req.body
+  try {
+    const hashedPassword = await bcrypt.hash(account_password, 10)
+
+    const regResult = await accountModel.registerAccount(
+      account_firstname,
+      account_lastname,
+      account_email,
+      hashedPassword
+    )
+
+    if (regResult && regResult.rowCount && regResult.rowCount > 0) {
+      return res.status(201).render('account/registered', {
+        title: 'Registration Successful',
+        nav,
+        firstName: account_firstname,
+      })
+    }
+
+    return res.status(400).render('account/registration', {
+      title: 'Register',
+      nav,
+      errors: [{ msg: 'Sorry, registration failed. Please try again.' }]
+    })
+  } catch (error) {
+    req.flash('notice', 'Sorry, there was an error processing the registration.')
+    return res.status(500).render('account/registration', {
+      title: 'Register',
+      nav,
+      errors: [{ msg: 'Sorry, there was an error processing the registration.' }]
+    })
+  }
+}
+
+accountController.buildRegistration = buildRegister
+
+module.exports = accountController
+
+accountController.registerAccount = registerAccount

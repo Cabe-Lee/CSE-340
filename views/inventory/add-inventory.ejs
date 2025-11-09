@@ -1,0 +1,55 @@
+
+<h1>Add Inventory Item</h1>
+
+<%- messages() %>
+
+<% if (typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+  <ul class="notice">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li><br>
+    <% }) %>
+  </ul>
+<% } %>
+
+<% if (typeof newInvId !== 'undefined') { %>
+  <p><a href="/inv/detail/<%= newInvId %>" class="btn btn-primary">View the new inventory item</a></p>
+<% } %>
+
+<form class="account-form" method="POST" action="/inv/add-inventory">
+    <h4>ALL FIELDS ARE REQUIRED</h4>
+
+    <label>Classification</label>
+    <%- classificationList %>
+
+    <label for="item_make">Make</label>
+    <input type="text" id="item_make" name="inv_make" placeholder="Min of 3 characters" pattern="[a-zA-Z]{3,}" required>
+
+    <label for="item_model">Model</label>
+    <input type="text" id="item_model" name="inv_model" placeholder="Min of 3 characters" pattern="[a-zA-Z]{3,}" required>
+
+    <label for="item_description">Description</label>
+	  <input type="text" id="item_description" name="inv_description" required>
+	
+    <label for="image_path">Image Path</label>
+    <input type="text" id="image_path" name="inv_image" value="/images/vehicles/no-image.png" required>
+
+    <label for="thumbnail_path">Thumbnail Path</label>
+    <input type="text" id="thumbnail_path" name="inv_thumbnail" value="/images/vehicles/no-image-tn.png" required>
+
+    <label for="item_price">Price</label>
+	  <input type="number" id="item_price" name="inv_price" placeholder="Decimal or integer" required>
+
+    <label for="item_year">Year</label>
+    <input type="text" id="item_year" name="inv_year" placeholder="4-digit year" pattern="[0-9]{4}" required>
+
+    <label for="item_miles">Miles</label>
+    <input type="number" id="item_miles" name="inv_miles" placeholder="Digits only" required>
+	
+    <label for="item_color">Color</label>
+    <input type="text" id="item_color" name="inv_color" pattern="[a-zA-Z]+" required>
+
+    <button type="submit">Add Item</button>
+</form>
+
+
+
