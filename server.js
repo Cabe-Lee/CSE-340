@@ -49,6 +49,11 @@ app.use(function(req, res, next){
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use(cookieParser())
+
+// JWT Token check middleware - moved before routes to ensure it runs for all requests
+app.use(utilities.checkJWTToken)
+
 /* ***********************
  * Routes
  *************************/
@@ -82,7 +87,7 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  if(err.status == 404){ message = err.message} else {message = 'Oh no! There was a crash. Maybe try a different route?'}
+  if(err.status == 404){ message = err.message} else {message = ''}
   res.render("errors/error", {
     title: err.status || 'Server Error',
     message: err.message,
@@ -95,8 +100,6 @@ app.use(async (err, req, res, next) => {
 utilities.handleErrors(baseController.buildHome)
 
 utilities.handleErrors(baseController.buildFooter)
-
-app.use(cookieParser())
 
 
 /* ***********************

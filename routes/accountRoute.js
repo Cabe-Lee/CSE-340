@@ -8,6 +8,16 @@ router.get('/login', utilities.handleErrors(accountController.buildLogin))
 
 router.get('/registration', utilities.handleErrors(accountController.buildRegistration))
 
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagement))
+
+router.get('/update/:account_id', utilities.checkLogin, utilities.handleErrors(accountController.buildUpdateAccount))
+
+router.post('/update', utilities.checkLogin, regValidate.updateRules(), regValidate.checkUpdateData, utilities.handleErrors(accountController.updateAccount))
+
+router.post('/update-password', utilities.checkLogin, regValidate.passwordRules(), regValidate.checkPasswordData, utilities.handleErrors(accountController.changePassword))
+
+router.get('/logout', utilities.handleErrors(accountController.accountLogout))
+
 // Process the registration data
 router.post(
         "/register",
@@ -23,4 +33,14 @@ router.post('/registration',
     utilities.handleErrors(accountController.registerAccount)
 )
 
+// Process the login request
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
+)
+
 module.exports = router
+
+

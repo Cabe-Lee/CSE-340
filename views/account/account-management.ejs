@@ -1,0 +1,29 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<% if (errors) { %>
+    <ul class="notice">
+        <% const errorsList = (typeof errors.array === 'function') ? errors.array() : errors; %>
+        <% errorsList.forEach(error => { %>
+            <li><%= error.msg || error %></li>
+        <% }) %>
+    </ul>
+<% } %>
+
+<% if (accountData) { %>
+  <% if (accountData.account_type === 'Client') { %>
+    <h2>Welcome <%= accountData.account_firstname %></h2>
+  <% } else if (accountData.account_type === 'Employee' || accountData.account_type === 'Admin') { %>
+    <h2>Welcome <%= accountData.account_firstname %></h2>
+    <h3>Inventory Management</h3>
+    <p><a href="/inv/">Access Inventory Management</a></p>
+  <% } %>
+  <p><a href="/account/update/<%= accountData.account_id %>">Update Account Information</a></p>
+<% } else { %>
+  <p>You're logged in</p>
+<% } %>
